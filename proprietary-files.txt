@@ -1,21 +1,29 @@
-# ADSP - from LA.UM.8.2.r1-06200-sdm660.0
+# ADSP - from LA.UM.8.2.r1-06500-sdm660.0
+lib/libadsprpc_system.so|cef6b4a4a62be987c2f448957705a38b873b16b0
+lib/libmdsprpc_system.so|2c42c46fb95d59913cda01676df26f68f3fb12ab
+lib/libsdsprpc_system.so|2891c6e0444ca5116f8433f4ff2a51cd223f490a
+lib64/libadsprpc_system.so|9e6c8d22b43803b97edd9fc4501adb19e0615cfb
+lib64/libmdsprpc_system.so|488a8c755f82da2d2872c378f29a066bb0df076f
+lib64/libsdsprpc_system.so|8e9cc46db3b4d3fbbc10dd7ff7ee8e26779e188d
 vendor/bin/adsprpcd|5b803e679ddbce4e59c2a67433ffefa6396d61f3
 vendor/lib/libadsp_default_listener.so|9c96cb953e83b6abc90dfbf4b62af7ddbecd97b7
 vendor/lib/libadsp_hvx_callback_skel.so|67cb46e6da3fa84d0cf086172591ba13493e663f
 vendor/lib/libadsp_hvx_stub.so|b3e1d3eef6cfdd51213dad37a8972bc931d1c139
 vendor/lib/libadsprpc.so|066a735fef432664c6b58ca52d902cb9ca585e2a
 vendor/lib/libfastcvadsp_stub.so|9957df1493863d78da261ab3bb8756be3f3d2583
-vendor/lib/libfastcvopt.so|00f5293affa2fcc606b0044f707761c0bb975365
+vendor/lib/libfastcvopt.so|27adfe1cf31ef6238444eb8a3c13730340be577e
 vendor/lib/libfastrpc_utf_stub.so|793413aac79aa4cb66bcd45d80195849eed8acd7
 vendor/lib/libmdsprpc.so|13a30a7961da26ea583f801e1d89daee45768444
 vendor/lib/libsdsprpc.so|3d20800cfda18e1695ade89b2bfc4cad3076c6a9
+vendor/lib/libssc_default_listener.so|809a32a55e5e137decc9623d4fc53d78a87d00cc
 vendor/lib64/libadsp_default_listener.so|ec9a452e318db1ddc5d826dd7cc2b14dd5fb2a14
 vendor/lib64/libadsprpc.so|0f3fcfb54bc38ec4ec46ccd7a0ba544a3090c723
 vendor/lib64/libfastcvadsp_stub.so|f84fd537f8f176e598c0cb49f0c457f308b67be4
-vendor/lib64/libfastcvopt.so|59d111f7472ed70390d15944a5f304db848447e4
+vendor/lib64/libfastcvopt.so|dc653999335457eb66e899ca84393c02a378172b
 vendor/lib64/libfastrpc_utf_stub.so|891a4c987862c1b2d844379f8fb3bcdcb737e8c1
 vendor/lib64/libmdsprpc.so|d18b171e2216385f9bfd8f9760450a5a7a523970
 vendor/lib64/libsdsprpc.so|9ff183e0ee950873cdcaa767585182554c5968ed
+vendor/lib64/libssc_default_listener.so|ffcffd3793fcaa96945b4a9a7a59fd6570d7d3f3
 
 # ADSP Modules - from LA.UM.8.2.r1-06200-sdm660.0
 vendor/lib/rfsa/adsp/libadsp_fd_skel.so|677d2932dac248049f031fc5893163e22b49439a
@@ -764,12 +772,17 @@ vendor/bin/wifidisplayhalservice|7b84c067e9caf4350a2436a912f5957f57b42c7b
 vendor/etc/init/com.qualcomm.qti.wifidisplayhal@1.0-service.rc|04e463342cbba4c0e9c311a18238f95dec9359fd
 vendor/lib/com.qualcomm.qti.wifidisplayhal@1.0-halimpl.so|5004085e4c19e7812f0c71881b12f3c5168b19e2
 vendor/lib/com.qualcomm.qti.wifidisplayhal@1.0.so|089b6b4b9217e0fdfc655491fecd6ddc1d027de6
+vendor/lib/libmiracast.so|beae10ca8d5eb23e9150c2d891c40d1b023a7fab
 vendor/lib/libmmosal_proprietary.so|ef5b82a40427a71a98ab3bc95b72299f8d971141
 vendor/lib/libwfdcommonutils_proprietary.so|af255ba4ce085c7502453b5bf7005f8ccfa78840
 vendor/lib/libwfdhaldsmanager.so|ad8747952cc5f85a68b4eab669897c82b086da05
 vendor/lib/libwfdhdcpcp.so|53cec4263ae5fe79a15783c86d336bb946bfc919
 vendor/lib/libwfdmmservice.so|d25a796600eb252d133c1370f3c62adc7e9a3d03
 vendor/lib/libwfdmodulehdcpsession.so|22b64660d1c0ca946960ecde14795e4de073ccff
+vendor/lib/vendor.qti.hardware.sigma_miracast@1.0.so|7ca31bd88bffc97e5d8a2b8a1b3706231b73befe
+vendor/lib64/libmiracast.so|1bc1d57aefd8cc429dcb07980d8015b45b0fdce5
+vendor/lib64/libmmosal_proprietary.so|b8dbc765c15f30dec9f1c0907a25810df1bc9731
+vendor/lib64/vendor.qti.hardware.sigma_miracast@1.0.so|bf72e5a9a9305ac1c0c5d9a5b5d401b694055dbf
 
 # Common Camera
 vendor/lib/libchromaflash.so|cf85560822e04014b8950a1abae9c2843069101d
