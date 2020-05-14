@@ -25,6 +25,18 @@
 # Common Tree Path
 COMMON_PATH := device/xiaomi/sdm660-common
 
+# A/B
+ifeq ($(ENABLE_AB), true)
+AB_OTA_UPDATER := true
+AB_OTA_PARTITIONS ?= \
+    boot \
+    system \
+    vendor
+BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
+BOARD_USES_RECOVERY_AS_BOOT := true
+TARGET_NO_RECOVERY := true
+endif
+
 # ANT+
 BOARD_ANT_WIRELESS_DEVICE := "qualcomm-hidl"
 
@@ -36,7 +48,7 @@ TARGET_ARCH := arm64
 TARGET_ARCH_VARIANT := armv8-a
 TARGET_CPU_ABI := arm64-v8a
 TARGET_CPU_ABI2 :=
-TARGET_CPU_VARIANT := kryo
+TARGET_CPU_VARIANT := cortex-a73
 
 # Architecture 2
 TARGET_2ND_ARCH := arm
@@ -94,7 +106,7 @@ HEALTHD_USE_BATTERY_INFO := true
 
 # Clang
 TARGET_KERNEL_CLANG_COMPILE := true
-TARGET_KERNEL_CLANG_VERSION := r353983c
+TARGET_KERNEL_CLANG_VERSION := r377782d
 
 # CNE and DPM
 BOARD_USES_QCNE := true
@@ -113,13 +125,6 @@ TARGET_ENABLE_MEDIADRM_64 := true
 
 # EXFAT
 TARGET_EXFAT_DRIVER := sdfat
-
-# FM
-AUDIO_FEATURE_ENABLED_FM_POWER_OPT := true
-#BOARD_HAS_QCA_FM_SOC := cherokee
-# BOARD_HAVE_QCOM_FM := true
-# BOARD_HAVE_FM_RADIO := true
-# BOARD_DISABLE_FMRADIO_LIBJNI := true
 
 # GPS
 BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := default
@@ -148,7 +153,7 @@ USE_DEVICE_SPECIFIC_IPACFG_MGR := true
 
 # Kernel
 BOARD_KERNEL_CMDLINE := console=ttyMSM0,115200,n8 androidboot.console=ttyMSM0 earlycon=msm_serial_dm,0xc170000 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 sched_enable_hmp=1 sched_enable_power_aware=1 service_locator.enable=1 swiotlb=1 androidboot.configfs=true androidboot.usbcontroller=a800000.dwc3
-BOARD_KERNEL_CMDLINE += loop.max_part=7
+BOARD_KERNEL_CMDLINE += loop.max_part=16
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_PAGESIZE := 4096
 BOARD_KERNEL_TAGS_OFFSET := 0x00000100
@@ -158,13 +163,19 @@ TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_HEADER_ARCH := arm64
 TARGET_KERNEL_VERSION := 4.4
 
+# Enable stats logging in LMKD
+TARGET_LMKD_STATS_LOG := true
+
 # Keymaster
 TARGET_PROVIDES_KEYMASTER := true
+
+# Metadata
+BOARD_USES_METADATA_PARTITION := true
 
 # Partitions
 BOARD_FLASH_BLOCK_SIZE := 262144
 BOARD_BOOTIMAGE_PARTITION_SIZE := 67108864
-ifneq ($(AB_OTA_UPDATER), true)
+ifneq ($(ENABLE_AB), true)
 BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_CACHEIMAGE_PARTITION_SIZE := 268435456
 BOARD_RECOVERYIMAGE_PARTITION_SIZE := 67108864
@@ -203,7 +214,7 @@ TARGET_USES_QCOM_BSP := false
 # Recovery
 ifneq ($(filter lavender,$(TARGET_DEVICE)),)
 TARGET_RECOVERY_FSTAB := $(COMMON_PATH)/rootdir/etc/fstab_A.qcom
-else ifeq ($(AB_OTA_UPDATER), true)
+else ifeq ($(ENABLE_AB), true)
 TARGET_RECOVERY_FSTAB := $(COMMON_PATH)/rootdir/etc/fstab_AB.qcom
 else
 TARGET_RECOVERY_FSTAB := $(COMMON_PATH)/rootdir/etc/fstab.qcom

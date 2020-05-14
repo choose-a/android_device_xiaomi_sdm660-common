@@ -19,6 +19,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
     audio.safemedia.bypass=true \
     audio.sys.noisy.broadcast.delay=600 \
     audio.sys.offload.pstimeout.secs=3 \
+    persist.audio.in_mmap_delay_micros=100 \
+    persist.audio.out_mmap_delay_micros=150 \
     persist.dirac.acs.controller=qem \
     persist.dirac.acs.ignore_error=1 \
     persist.dirac.acs.storeSettings=1 \
@@ -88,19 +90,26 @@ PRODUCT_PROPERTY_OVERRIDES += \
     vendor.audio.feature.incall_music.enable=false \
     vendor.audio.feature.multi_voice_session.enable=true \
     vendor.audio.feature.keep_alive.enable=false \
-    vendor.audio.feature.kpi_optimize.enable=true \
+    vendor.audio.feature.kpi_optimize.enable=false \
     vendor.audio.feature.maxx_audio.enable=false \
-    vendor.audio.feature.ras.enable=false \
+    vendor.audio.feature.ras.enable=true \
     vendor.audio.feature.record_play_concurency.enable=false \
     vendor.audio.feature.snd_mon.enable=false \
     vendor.audio.feature.src_trkn.enable=true \
-    vendor.audio.feature.spkr_prot.enable=false \
     vendor.audio.feature.ssrec.enable=false \
-    vendor.audio.feature.usb_offload.enable=false \
+    vendor.audio.feature.usb_offload.enable=true \
     vendor.audio.feature.usb_offload_burst_mode.enable=false \
     vendor.audio.feature.usb_offload_sidetone_volume.enable=false \
     vendor.audio.feature.vbat.enable=true \
-    vendor.audio.feature.wsa.enable=true
+    vendor.audio.feature.wsa.enable=false
+
+ifneq ($(filter jason,$(TARGET_DEVICE)),)
+PRODUCT_PROPERTY_OVERRIDES += \
+    vendor.audio.feature.spkr_prot.enable=false
+else
+PRODUCT_PROPERTY_OVERRIDES += \
+    vendor.audio.feature.spkr_prot.enable=true
+endif
 
 # Bluetooth
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -115,6 +124,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Camera
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.camera.privapp.list=org.codeaurora.snapcam \
+    persist.vendor.camera.dual.isp.sync=0 \
     persist.vendor.camera.HAL3.enabled=1 \
     persist.vendor.camera.eis.enable=1 \
     persist.vendor.camera.exif.make=Xiaomi \
@@ -184,6 +194,14 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.dbg.vt_avail_ovr=1 \
     persist.vendor.ims.disableUserAgent=0
 
+# LMKD
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.config.low_ram=false \
+    ro.lmk.kill_heaviest_task=true \
+    ro.lmk.kill_timeout_ms=100 \
+    ro.lmk.use_minfree_levels=true \
+    ro.lmk.log_stats=true
+
 # Media
 PRODUCT_PROPERTY_OVERRIDES += \
     debug.stagefright.omx_default_rank.sw-audio=1 \
@@ -194,7 +212,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     media.stagefright.enable-player=true \
     media.stagefright.enable-qcp=true \
     media.stagefright.enable-scan=true \
-		media.stagefright.thumbnail.prefer_hw_codecs=true \
+    media.stagefright.thumbnail.prefer_hw_codecs=true \
     mm.enable.qcom_parser=13631471 \
     mm.enable.smoothstreaming=true \
     mmp.enable.3g2=true \
@@ -227,7 +245,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.vendor.cne.feature=1 \
     persist.vendor.dpm.feature=1 \
     persist.vendor.qcomsysd.enabled=1 \
-    ro.vendor.at_library=libqti-at.so \
     ro.vendor.extension_library=libqti-perfd-client.so
 
 # QTI
@@ -239,40 +256,30 @@ PRODUCT_ODM_PROPERTIES += \
 
 # Radio
 PRODUCT_PROPERTY_OVERRIDES += \
-    DEVICE_PROVISIONED=1 \
-    persist.data.df.agg.dl_pkt=10 \
-    persist.data.df.agg.dl_size=4096 \
-    persist.data.df.dev_name=rmnet_usb0 \
-    persist.data.df.dl_mode=5 \
-    persist.data.df.iwlan_mux=9 \
-    persist.data.df.mux_count=8 \
-    persist.data.df.ul_mode=5 \
-    persist.data.netmgrd.qos.enable=true \
-    persist.data.wda.enable=true \
+    persist.backup.ntpServer=0.pool.ntp.org \
     persist.radio.aosp_usr_pref_sel=true \
     persist.radio.add_power_save=1 \
     persist.radio.VT_CAM_INTERFACE=2 \
     persist.radio.data_con_rprt=1 \
-    persist.radio.schd.cache=3500 \
-    persist.radio.calls.on.ims=1 \
-    persist.rmnet.data.enable=true \
     persist.vendor.data.mode=concurrent \
     persist.vendor.qti.telephony.vt_cam_interface=1 \
     persist.vendor.radio.apm_sim_not_pwdn=1 \
     persist.vendor.radio.atfwd.start=true \
     persist.vendor.radio.custom_ecc=1 \
     persist.vendor.radio.data_con_rprt=1 \
-    persist.vendor.radio.data_ltd_sys_ind=1 \
-    persist.vendor.radio.flexmap_type=none \
     persist.vendor.radio.rat_on=combine \
     persist.vendor.radio.sib16_support=1 \
     persist.vendor.radio.procedure_bytes=SKIP \
-    ril.subscription.types=NV,RUIM \
     vendor.rild.libpath=/vendor/lib64/libril-qc-hal-qmi.so \
-    ro.telephony.default_network=22,20 \
+    ro.telephony.default_network=9,9 \
     ro.telephony.iwlan_operation_mode=legacy \
     ro.telephony.use_old_mnc_mcc_format=true \
-    ro.vendor.use_data_netmgrd=true \
+    ro.vendor.use_data_netmgrd=true
+
+PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
+    DEVICE_PROVISIONED=1 \
+    persist.sys.fflag.override.settings_network_and_internet_v2=true \
+    ril.subscription.types=NV,RUIM \
     telephony.lteOnCdmaDevice=1
 
 # Rendering
@@ -295,7 +302,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.vendor.sensors.sta_detect=true
 
 # SurfaceFlinger
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+PRODUCT_PROPERTY_OVERRIDES += \
     ro.surface_flinger.force_hwc_copy_for_virtual_displays=true \
     ro.surface_flinger.max_frame_buffer_acquired_buffers=3 \
     ro.surface_flinger.max_virtual_display_dimension=4096 \

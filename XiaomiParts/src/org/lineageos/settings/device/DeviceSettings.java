@@ -27,16 +27,31 @@ import org.lineageos.settings.device.kcal.KCalSettingsActivity;
 import org.lineageos.settings.device.preferences.SecureSettingListPreference;
 import org.lineageos.settings.device.preferences.SecureSettingSwitchPreference;
 import org.lineageos.settings.device.preferences.VibrationSeekBarPreference;
+import org.lineageos.settings.device.preferences.NotificationLedSeekBarPreference;
+import org.lineageos.settings.device.preferences.CustomSeekBarPreference;
 
 public class DeviceSettings extends PreferenceFragment implements
         Preference.OnPreferenceChangeListener {
 
+    public static final String CATEGORY_VIBRATOR = "vibration";
     public static final String PREF_VIBRATION_STRENGTH = "vibration_strength";
     public static final String VIBRATION_STRENGTH_PATH = "/sys/devices/virtual/timed_output/vibrator/vtg_level";
 
+    public static final String CATEGORY_NOTIF = "notification_led";
+    public static final String PREF_NOTIF_LED = "notification_led_brightness";
+    public static final String NOTIF_LED_PATH = "/sys/class/leds/white/max_brightness";
+
+    public static final  String PREF_HEADPHONE_GAIN = "headphone_gain";
+    public static final  String PREF_MIC_GAIN = "mic_gain";
+    public static final  String HEADPHONE_GAIN_PATH = "/sys/kernel/sound_control/headphone_gain";
+    public static final  String MIC_GAIN_PATH = "/sys/kernel/sound_control/mic_gain";
+    
     // value of vtg_min and vtg_max
     public static final int MIN_VIBRATION = 116;
     public static final int MAX_VIBRATION = 3596;
+
+    public static final int MIN_LED = 1;
+    public static final int MAX_LED = 64;
 
     private static final String CATEGORY_DISPLAY = "display";
     private static final String PREF_DEVICE_DOZE = "device_doze";
@@ -56,19 +71,48 @@ public class DeviceSettings extends PreferenceFragment implements
 
     private static final String DEVICE_DOZE_PACKAGE_NAME = "org.lineageos.settings.doze";
 
+    private static final String DEVICE_JASON_PACKAGE_NAME = "org.lineageos.settings.devicex";
+    private static final String PREF_DEVICE_JASON = "device_jason";
+
     private SecureSettingListPreference mTHERMAL;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.preferences_xiaomi_parts, rootKey);
 
-        VibrationSeekBarPreference vibrationStrength = (VibrationSeekBarPreference) findPreference(PREF_VIBRATION_STRENGTH);
-        vibrationStrength.setEnabled(FileUtils.fileWritable(VIBRATION_STRENGTH_PATH));
-        vibrationStrength.setOnPreferenceChangeListener(this);
+        if (FileUtils.fileWritable(NOTIF_LED_PATH)) {
+            NotificationLedSeekBarPreference notifLedBrightness =
+                    (NotificationLedSeekBarPreference) findPreference(PREF_NOTIF_LED);
+            notifLedBrightness.setOnPreferenceChangeListener(this);
+        } else { getPreferenceScreen().removePreference(findPreference(CATEGORY_NOTIF)); }
+
+        if (FileUtils.fileWritable(VIBRATION_STRENGTH_PATH)) {
+            VibrationSeekBarPreference vibrationStrength = (VibrationSeekBarPreference) findPreference(PREF_VIBRATION_STRENGTH);
+            vibrationStrength.setOnPreferenceChangeListener(this);
+        } else { getPreferenceScreen().removePreference(findPreference(CATEGORY_VIBRATOR)); }
+
+        // Headphone Gain
+        CustomSeekBarPreference headphoneGain = (CustomSeekBarPreference) findPreference(PREF_HEADPHONE_GAIN);
+        if (FileUtils.fileWritable(HEADPHONE_GAIN_PATH)) {
+           headphoneGain.setOnPreferenceChangeListener(this);
+        } else {
+          getPreferenceScreen().removePreference(headphoneGain);
+        }
+        // Mic Gain
+        CustomSeekBarPreference micGain = (CustomSeekBarPreference) findPreference(PREF_MIC_GAIN);
+         if (FileUtils.fileWritable(MIC_GAIN_PATH)) {
+          micGain.setOnPreferenceChangeListener(this);
+         } else {
+        getPreferenceScreen().removePreference(micGain);
+        }
 
         PreferenceCategory displayCategory = (PreferenceCategory) findPreference(CATEGORY_DISPLAY);
         if (isAppNotInstalled(DEVICE_DOZE_PACKAGE_NAME)) {
             displayCategory.removePreference(findPreference(PREF_DEVICE_DOZE));
+        }
+
+        if (isAppNotInstalled(DEVICE_JASON_PACKAGE_NAME)) {
+            displayCategory.removePreference(findPreference(PREF_DEVICE_JASON));
         }
 
         Preference kcal = findPreference(PREF_DEVICE_KCAL);
@@ -121,9 +165,21 @@ public class DeviceSettings extends PreferenceFragment implements
     public boolean onPreferenceChange(Preference preference, Object value) {
         final String key = preference.getKey();
         switch (key) {
+            case PREF_NOTIF_LED:
+                FileUtils.setValue(NOTIF_LED_PATH, (int) value / 100.0 * (MAX_LED - MIN_LED) + MIN_LED);
+                break;
+
             case PREF_VIBRATION_STRENGTH:
                 double vibrationValue = (int) value / 100.0 * (MAX_VIBRATION - MIN_VIBRATION) + MIN_VIBRATION;
                 FileUtils.setValue(VIBRATION_STRENGTH_PATH, vibrationValue);
+                break;
+
+            case PREF_HEADPHONE_GAIN:
+                FileUtils.setValue(HEADPHONE_GAIN_PATH, value + " " + value);
+                break;
+
+            case PREF_MIC_GAIN:
+                FileUtils.setValue(MIC_GAIN_PATH, (int) value);
                 break;
 
             case PREF_THERMAL:
