@@ -72,9 +72,6 @@ BOARD_SUPPORTS_SOUND_TRIGGER_HAL := true
 AUDIO_USE_DEEP_AS_PRIMARY_OUTPUT := false
 AUDIO_DISABLE_SWAP_CHANNELS := true
 
-# Binder
-TARGET_USES_64_BIT_BINDER := true
-
 # Bluetooth
 BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_QCOM := true
@@ -224,6 +221,8 @@ ifneq ($(filter lavender,$(TARGET_DEVICE)),)
 TARGET_RECOVERY_FSTAB := $(COMMON_PATH)/rootdir/etc/fstab_A.qcom
 else ifeq ($(ENABLE_AB), true)
 TARGET_RECOVERY_FSTAB := $(COMMON_PATH)/rootdir/etc/fstab_AB.qcom
+else ifeq ($(ENABLE_ENCRYPTION), true)
+TARGET_RECOVERY_FSTAB := $(COMMON_PATH)/rootdir/etc/fstab_FE.qcom
 else
 TARGET_RECOVERY_FSTAB := $(COMMON_PATH)/rootdir/etc/fstab.qcom
 endif
